@@ -1,0 +1,62 @@
+﻿Fraction to Recurring Decimal 
+
+
+Description: 
+
+Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+Example 1:
+
+Input: numerator = 1, denominator = 2
+Output: "0.5"
+Example 2:
+
+Input: numerator = 2, denominator = 1
+Output: "2"
+Example 3:
+
+Input: numerator = 2, denominator = 3
+Output: "0.(6)"
+
+
+
+
+Solution:
+
+一开始判断正负（加符号）和是否整除（如可以整除，直接返回整数），否则肯定是小数，取分子分母绝对值，相除得商，放入整数位，加"."之后，余数乘以10继续除以分母，所得的商按顺序放在返回的字符串中，但是这边要注意建立一个字典，判断余数是否重复出现，如果重复出现就按除不尽的表达式处理，一直不相同就代表除的尽，一直除到0为止（即以numerator为0一直做循环）。一开始想复杂了，因为考虑到会不会有0.123123123……这种除不尽的，但是两数相除只会存在最后一位一直重复的情况，所以不需要考虑。
+
+
+
+
+
+Code:
+
+class Solution:
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+        res = ""
+        if numerator//denominator < 0:
+            res = res + "-"
+        if numerator%denominator == 0:
+            return str(numerator//denominator)
+        numerator = abs(numerator)
+        denominator = abs(denominator)
+        res = res + str(numerator//denominator)
+        res = res + "."
+        numerator = numerator % denominator
+        i = len(res)
+        table = {}
+        while numerator!=0:
+            if numerator not in table.keys():
+                table[numerator] = i
+            else:
+                i = table[numerator]
+                res = res[:i] + "(" + res[i:] + ")"
+                return res
+            numerator = numerator * 10
+            res = res+ str(numerator//denominator)
+            numerator = numerator % denominator
+            i = i + 1
+        return res
+        

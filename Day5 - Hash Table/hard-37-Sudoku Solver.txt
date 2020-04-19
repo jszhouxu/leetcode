@@ -1,0 +1,52 @@
+﻿Sudoku Solver
+
+Description: 
+
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+
+A sudoku solution must satisfy all of the following rules:
+
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+Empty cells are indicated by the character '.'.
+
+Note:
+
+The given board contain only digits 1-9 and the character '.'.
+You may assume that the given Sudoku puzzle will have a single unique solution.
+The given board size is always 9x9.
+
+
+
+
+
+Solution:
+
+不会写，看了一个看的懂的答案，比较暴力。
+对格子里面的每个元素进行遍历，如果是'.'，说明是要填的，把横竖和九宫格里面已有的数字去掉，具体为：
+s9 - {row[k] for k in r9} - {board[k][j] for k in r9} - {board[i // 3 * 3 + m][j // 3 * 3 + n] for m in r3 for n in r3}，s9是{'1', '2', '3', '4', '5', '6', '7', '8', '9'}，先减掉横行里面有的数字，再减掉纵行里面有的数字，再减掉九宫格里面有的数字，剩下的数字如果有就一一进行尝试，如果完成就退出，没完成就重新把该格赋回'.'，继续进行求解。
+
+
+
+
+
+Code:
+
+class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        def dfs():
+            for i, row in enumerate(board):
+                for j, char in enumerate(row):
+                    if char == '.':
+                        for x in s9 - {row[k] for k in r9} - {board[k][j] for k in r9} - {board[i // 3 * 3 + m][j // 3 * 3 + n] for m in r3 for n in r3}:
+                            board[i][j] = x
+                            if dfs(): return True
+                            board[i][j] = '.'
+                        return False
+            return True
+        r3, r9, s9 = range(3), range(9), {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+        dfs()

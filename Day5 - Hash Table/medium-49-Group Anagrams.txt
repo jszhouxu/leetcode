@@ -1,0 +1,46 @@
+﻿Group Anagrams
+
+
+Description: 
+
+Given an array of strings, group anagrams together.
+
+Example:
+
+Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
+Output:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+Note:
+
+All inputs will be in lowercase.
+The order of your output does not matter.
+
+
+
+
+
+Solution:
+
+暴力解法，建立一个dictionary，判断每一个元素，如果其已存在dictionary里面，跳过，否则将其拆分成每个字符，判断每个字符是否正好match字典里面的每一个字符串，如果是，将该元素将入该字符串的数组行，否则单独存入一行。
+虽然通过测试，但感觉有更好的方法，参考了一个更好的答案，将strs里面的每一个字符串进行排序，然后判断是否在dictionary里面，不在就单独放，在就放在已存在的之后。
+
+
+
+
+
+Code:
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        ht = {}
+        for st in strs:
+            sst = "".join(sorted(st))
+            if sst not in ht:
+                ht[sst] = [st]
+            else:
+                ht[sst].append(st)
+        return ht.values()

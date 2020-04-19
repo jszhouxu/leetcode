@@ -1,0 +1,51 @@
+﻿First Missing Positive
+
+
+Description: 
+
+Given an unsorted integer array, find the smallest missing positive integer.
+
+Example 1:
+
+Input: [1,2,0]
+Output: 3
+Example 2:
+
+Input: [3,4,-1,1]
+Output: 2
+Example 3:
+
+Input: [7,8,9,11,12]
+Output: 1
+Note:
+
+Your algorithm should run in O(n) time and uses constant extra space.
+
+
+
+
+
+Solution:
+
+先对数组从小到大排序，然后考虑三个特殊条件：1. 空数组返回1；2. 如果该数组中不含1，返回1；3. 如果数组长度为1，元素也为1，那么返回2。
+然后遍历排序后的数组，如果后一个元素大于前一个元素+1且前一个元素+1>0，那么返回前一个元素+1。
+
+
+
+
+
+Code:
+
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        nums.sort()
+        if len(nums) == 0:
+            return 1
+        if 1 not in nums:
+            return 1
+        if len(nums) == 1 and nums[0] == 1:
+            return 2        
+        for i in range(len(nums)-1):
+            if nums[i+1] > nums[i]+1 and nums[i]+1>0:
+                return nums[i]+1
+        return nums[-1]+1

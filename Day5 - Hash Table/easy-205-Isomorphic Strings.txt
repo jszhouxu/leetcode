@@ -1,0 +1,57 @@
+﻿Isomorphic Strings    
+
+
+Description: 
+
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+
+Example 1:
+
+Input: s = "egg", t = "add"
+Output: true
+Example 2:
+
+Input: s = "foo", t = "bar"
+Output: false
+Example 3:
+
+Input: s = "paper", t = "title"
+Output: true
+Note:
+You may assume both s and t have the same length.
+
+
+
+
+
+Solution:
+
+建立两个dictionary，并判断s和t里面的每一个字符，如果对应字符不在对应的dictionary里面，则将该字符map到另外一个dictionary对应字符处。如果已经在对应的dictionary里面，说明是之前出现过的字符，判断这次出现的是否对应相同，不是则返回False。都判断完了可以返回True。
+注意一个如果两个字符串长度不一致，那么肯定返回False。
+
+
+
+
+
+Code:
+
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        sdic, vdic = {},{}
+        
+        if len(s) != len(t):
+            return False
+        
+        for i in range(len(s)):
+            cs, ct = s[i], t[i]
+            if cs not in sdic:
+                sdic[cs] = ct
+            if ct not in vdic:
+                vdic[ct] = cs
+            if sdic[cs]!=ct or vdic[ct]!=cs:
+                    return False
+        return True

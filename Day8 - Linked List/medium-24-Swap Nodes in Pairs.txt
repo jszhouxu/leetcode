@@ -1,0 +1,37 @@
+﻿Add Two Numbers
+
+
+Description: 
+
+Given a linked list, swap every two adjacent nodes and return its head.
+
+You may not modify the values in the list's nodes, only nodes itself may be changed.
+
+Example:
+
+Given 1->2->3->4, you should return the list as 2->1->4->3.
+
+
+
+
+
+Solution:
+
+自我调用递归解的话，每次只要改变两个node的顺序，一直到最初的两个节点head和head.next，比较绕的地方在于怎么改变这两个节点（将head.next指向的节点比如h变成head指向的节点，head变成head.next指向的节点），应该是先将head.next指针先临时存到一个新指针比如newhead中，然后把h放到head.next指向的位置，再将head放到newhead.next指向的位置（即head.next.next -> head)，返回newhead（即head.next -> head -> h）
+
+
+
+
+
+Code:
+
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if head and head.next:
+            h = self.swapPairs(head.next.next)
+            newhead = head.next
+            head.next = h
+            newhead.next = head
+            return newhead
+        else:
+            return head

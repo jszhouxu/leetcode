@@ -1,0 +1,60 @@
+﻿Linked List Cycle
+
+
+Description: 
+
+Given a linked list, determine if it has a cycle in it.
+
+To represent a cycle in the given linked list, we use an integer pos which represents the position (0-indexed) in the linked list where tail connects to. If pos is -1, then there is no cycle in the linked list.
+
+Example 1:
+
+Input: head = [3,2,0,-4], pos = 1
+Output: true
+Explanation: There is a cycle in the linked list, where tail connects to the second node.
+
+Example 2:
+
+Input: head = [1,2], pos = 0
+Output: true
+Explanation: There is a cycle in the linked list, where tail connects to the first node.
+
+Example 3:
+
+Input: head = [1], pos = -1
+Output: false
+Explanation: There is no cycle in the linked list.
+
+Follow up:
+
+Can you solve it using O(1) (i.e. constant) memory?
+
+
+
+
+
+Solution:
+
+一开始想的是用字典存遍历链表时里面的节点，遍历过程中，如果遇到一个节点已经在字典中，那么肯定有环路，否则就没有环路。但这个的空间复杂度好像是O(n)。
+看了答案用双指针，一个快（2步），一个慢（1步），均遍历整个链表，如果能在遍历过程中相遇，说明有环，如果一直到遍历结束都没法相遇，说明没有环。
+
+
+
+
+
+Code:
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        if head == None or head.next == None:
+            return False
+        prev = head
+        current = head.next
+        while current.next != None :
+            current = current.next.next
+            prev = prev.next
+            if current == prev :
+                return True
+            if current == None or current.next == None : 
+                return False
+        return False

@@ -1,0 +1,62 @@
+﻿Minimum Window Substring
+
+
+Description: 
+
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+Example:
+
+Input: S = "ADOBECODEBANC", T = "ABC"
+Output: "BANC"
+Note:
+
+If there is no such window in S that covers all characters in T, return the empty string "".
+If there is such window, you are guaranteed that there will always be only one unique minimum window in S.
+
+
+
+
+
+Solution:
+
+本来想的是暴力解法，但是要求O(n)，所以看了答案。
+答案思想是sliding window，先扩右边界，再收左边界。
+先遍历目标字符串t，把对应的字符及其出现的次数存到Hash表中，然后遍历源字符串s，先确定右边界，针对每个字母，将其对应的Hash表中的值减1，如果减1后仍然>=0，说明遍历到的字母是t中的字母，计数器n+1，如果n=t的长度时，所有t中的字符全部包含到了，记录n为当前最小的长度。然后左边界进行右移收缩，如果移除的字母是t中的，那么n-1，t中所有字母并没有被完全包括，需要再次右移右边界，找到后，再次记录n，看其是否是历史最小，是就替代，如此反复进行。
+
+
+
+
+
+Code:
+
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        len_s, len_t = len(s), len(t)
+        if not s or not t or len_s<len_t:
+            return ""
+        
+        dic, count = {}, 0
+        left, right, min_width = 0, 0, len_s + 1
+        res = ""
+        for c in t:
+            dic[c] = dic.get(c,0)+1
+
+        while right < len_s:
+            if s[right] in dic:
+                if dic[s[right]]>0:
+                    count+=1
+                dic[s[right]]-=1
+            
+            while count == len(t):
+                if right-left+1 < min_width:
+                    min_width = right-left+1
+                    res = s[left:right+1]
+                
+                if s[left] in dic:
+                    dic[s[left]]+=1
+                    if dic[s[left]] > 0:
+                        count-=1
+                left+=1
+            right+=1
+        return res

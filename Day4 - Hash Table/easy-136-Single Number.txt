@@ -1,0 +1,49 @@
+﻿Single Number 
+
+
+Description: 
+
+Given a non-empty array of integers, every element appears twice except for one. Find that single one.
+
+Note:
+
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+Example 1:
+
+Input: [2,2,1]
+Output: 1
+Example 2:
+
+Input: [4,1,2,1,2]
+Output: 4
+
+
+
+
+
+Solution:
+
+一开始想法是将数组进行排序，排序完按两个相邻的值遍历一遍即可。但是这样复杂度是O(nlogn)，应该不满足题目要求。
+除这种方法外，想了10分钟还是想不出来，看了答案，用python里面的异或命令做。
+
+
+
+
+
+Code:
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        """
+        nums.sort()
+        for index in range(1,len(nums),2):
+            if nums[index]!=nums[index-1]:
+                return nums[index-1]
+        return nums[-1]
+        """
+        
+        ans = 0
+        for x in nums:
+            ans^=x
+        return ans

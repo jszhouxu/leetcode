@@ -1,0 +1,40 @@
+﻿Count Primes
+
+
+Description: 
+
+Count the number of prime numbers less than a non-negative number, n.
+
+Example:
+
+Input: 10
+Output: 4
+Explanation: There are 4 prime numbers less than 10, they are 2, 3, 5, 7.
+
+
+
+
+
+Solution:
+
+之前字节面试做过类似的输出n以内的所有质数。
+如果n小于3，那么返回0，因为0、1不为质数。之后判断每个数是否能被从2到其平方根之间的所有数整除，如果均不能，则为质数。 
+
+
+
+
+
+Code:
+
+class Solution:
+    def countPrimes(self, n: int) -> int:
+        prime = [True] * n
+        if n < 3:
+            return 0
+        else:
+            prime[0] = prime[1] = False
+            for i in range(2, int(math.sqrt(n)) + 1):
+                if prime[i]:
+                    for j in range(i * i, n, i):
+                        prime[j] = False
+        return sum(prime)

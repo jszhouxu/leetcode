@@ -1,0 +1,58 @@
+﻿Combination Sum  
+
+
+Description: 
+
+Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+
+The same repeated number may be chosen from candidates unlimited number of times.
+
+Note:
+
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+Example 1:
+
+Input: candidates = [2,3,6,7], target = 7,
+A solution set is:
+[
+  [7],
+  [2,2,3]
+]
+Example 2:
+
+Input: candidates = [2,3,5], target = 8,
+A solution set is:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+
+
+
+
+
+Solution:
+
+想了很久还是想不出怎么做。看了讨论区里的答案，用自我调用+recursive的思想做。
+遍历整个candidate数组，选择一个candidate，同时分解成子问题（将target变为target-candidate)，自我调用（传递参数为该candidate之后的candidate数组，因为之前的candidate肯定已经有combination生成，所以避免使用之前的candidate可以避免combination的重复），一直到target小于candidate数组中最小的元素。
+
+
+
+
+
+Code:
+
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        if target < min(candidates):
+            return []
+        res = []
+        for i in range(len(candidates)):
+            if candidates[i]==target:
+                res.append([target])
+            else:
+                for prev in self.combinationSum(candidates[i:],target-candidates[i]):
+                    res.append([candidates[i]] + prev)
+        return res
