@@ -1,0 +1,17 @@
+﻿Two Sum
+
+Description: 
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+Example:
+
+Given nums = [2, 7, 11, 15], target = 9,
+
+Because nums[0] + nums[1] = 2 + 7 = 9,
+return [0, 1].
+
+Solution:
+第一轮刷过此题，第一轮刷的思路是暴力解法，定义两个循环，在保证一个元素不变的情况下，遍历所有剩下的元素是否有符合条件的差值。后参考过答案。
+本轮刷题采取的思路是建立一个dictionary，计算目标值与当前数组值的差值，在dictionary里面查找该差值，若有，则返回index，若没有，则在dictionary里面更新当前数组值以及其index。
