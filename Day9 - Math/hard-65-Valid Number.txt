@@ -1,0 +1,84 @@
+﻿Valid Number
+
+
+Description: 
+
+Validate if a given string can be interpreted as a decimal number.
+
+Some examples:
+"0" => true
+" 0.1 " => true
+"abc" => false
+"1 a" => false
+"2e10" => true
+" -90e3   " => true
+" 1e" => false
+"e3" => false
+" 6e-1" => true
+" 99e2.5 " => false
+"53.5e93" => true
+" --6 " => false
+"-+3" => false
+"95a54e53" => false
+
+Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one. However, here is a list of characters that can be in a valid decimal number:
+
+Numbers 0-9
+Exponent - "e"
+Positive/negative sign - "+"/"-"
+Decimal point - "."
+Of course, the context of these characters also matters in the input.
+
+
+
+
+
+
+Solution:
+
+比较笨的方法是把所有的rule全部写出来，我写的不全，对了一下答案发现几个漏写的。主要有初始的字符格式，符号标识符，数字，十进制数，指数符号，指数数值，指数，小数点，还有结尾字符。
+答案里面有very elegant的solution，不过没太看得懂，需要进一步理解。
+
+
+
+
+
+Code:
+
+class Solution:
+    def isNumber(self, s: str) -> bool:
+        rules = {
+            'start': ['sign', 'num', 'start', '.',],
+            'sign': ['num', '.'],
+            'num': ['e', 'num', 'end', 'dec_found', ],
+            'dec_num': [ 'dec_num', 'end', 'e', ],
+            'dec_found': [ 'dec_num', 'end', 'e', ],
+            '.': [ 'dec_num', ],
+            'e': [ 'exp_num', 'exp_sign', ],
+            'exp_sign': [ 'exp_num', ],
+            'exp_num': [ 'exp_num', 'end', ],
+            'end': ['end'],
+        }
+        chars = {
+            'start': [' '],
+            'sign': ['-', '+'],
+            'num': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',],
+            'dec_num': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',],
+            'exp_sign': ['-', '+'],
+            'exp_num': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',],
+            'e': ['e'],
+            '.': ['.'],
+            'dec_found': ['.'],
+            'end' : [' '],
+        }
+        state = 'start'
+        for char in s:
+            char_found = False
+            for next_state in rules[state]:
+                if char in chars[next_state]:
+                    state = next_state
+                    char_found = True
+                    break
+            if not char_found:
+                return False
+        return 'end' in rules[state]
