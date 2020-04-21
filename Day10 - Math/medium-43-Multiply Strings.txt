@@ -1,0 +1,56 @@
+﻿Multiply Strings
+
+
+Description: 
+
+Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string.
+
+Example 1:
+
+Input: num1 = "2", num2 = "3"
+Output: "6"
+Example 2:
+
+Input: num1 = "123", num2 = "456"
+Output: "56088"
+Note:
+
+The length of both num1 and num2 is < 110.
+Both num1 and num2 contain only digits 0-9.
+Both num1 and num2 do not contain any leading zero, except the number 0 itself.
+You must not use any built-in BigInteger library or convert the inputs to integer directly.
+
+
+
+
+Solution:
+
+首先判断特殊条件，任意一个数为0，返回'0'。否则将两个string全部倒序排列，因为要从各位开始乘起。内外遍历两个字符串的每个数字字符，首先先将单个字符转化为integer（不与题目冲突），然后带进位相乘（两个数字相乘加进位对10取余，余数乘以10的幂数，该幂数为这个字符处于第几位），同时更新进位（两个数字相乘加进位对10做除的商）。
+
+
+
+
+
+Code:
+
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        if num1 == '0' or num2 =='0':
+            return '0'
+        res = []
+        num1 = num1[::-1]
+        num2 = num2[::-1]
+        
+        for i in range(len(num2)):
+            d1 = int(num2[i])
+            carry = 0
+            product = 0
+            for j in range(len(num1)):
+                d2 = int(num1[j])
+                product += (d1 * d2 + carry) % 10 * (10**(j))
+                carry = (d1 * d2 + carry) // 10
+            if carry:
+                product += carry*(10**len(num1))
+            product *= (10**(i))
+            res.append(product)
+        return str(sum(res))
