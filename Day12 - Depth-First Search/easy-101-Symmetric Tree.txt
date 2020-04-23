@@ -1,0 +1,90 @@
+﻿Symmetric Tree
+
+
+Description: 
+
+Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+
+For example, this binary tree [1,2,2,3,4,4,3] is symmetric:
+
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+ 
+
+But the following [1,2,2,null,3,null,3] is not:
+
+    1
+   / \
+  2   2
+   \   \
+   3    3
+ 
+
+Follow up: Solve it both recursively and iteratively.
+
+
+
+
+
+Solution:
+
+两种解法，一种recursively，一种iteratively。
+Recursively: root如果为空，直接返回True。定义一个可重复调用的function check，输入参数为两个tree，t1 and t2，如果t1和t2都为空，直接返回True，如果t1为空，t2不空或者t1不空，t2为空，直接返回False。如果t1.val不等于t2.val，也直接返回False。如果以上情况都不满足，返回t1.left和t2.right的check结果以及t1.right和t2.left的check结果之and。
+iteratively: 用双向队列deque，如果root为空，直接返回true。如果root左边和右边不为空，且两边的val相等，把left和right放入q1和q2中，否则直接返回False。如果root左边和右边有一个为空，直接返回False。开始遍历整个q1和q2，每次把两个队列的队首元素取出来比较并移除，如果不等，直接False，如果两个都是非空节点，继续比下面的left以及right，如果有一个是空节点，直接False，左左部分和右右部分比完之后，要比左右部分和右左部分，一样的比法。
+
+
+
+
+
+Code:
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if not root: return True
+        q1 = deque()
+        q2 = deque()
+        if root.left and root.right:
+            if root.left.val == root.right.val:
+                q1.append(root.left)
+                q2.append(root.right)
+            else:
+                return False
+        elif (root.left or root.right):
+            return False
+        while q1 and q2:
+            l = q1.popleft()
+            r = q2.popleft()
+            if l.val != r.val:
+                return False
+            if l.left and r.right:
+                q1.append(l.left)
+                q2.append(r.right)
+            elif l.left or r.right:
+                return False
+            if l.right and r.left:
+                q1.append(l.right)
+                q2.append(r.left)
+            elif l.right or r.left:
+                return False
+        return True
+            
+        '''
+        if not root:
+            return True
+        def check(t1,t2):
+            if not t1 and not t2:
+                return True
+            if not t1 and t2:
+                return False
+            if t1 and not t2:
+                return False
+            if t1.val!=t2.val:
+                return False
+            return check(t1.left,t2.right) and check(t1.right,t2.left)
+        
+        return check(root.left,root.right)
+        '''
+        

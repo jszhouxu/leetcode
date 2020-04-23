@@ -1,0 +1,58 @@
+﻿Same Tree
+
+
+Description: 
+
+Given two binary trees, write a function to check if they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical and the nodes have the same value.
+
+Example 1:
+
+Input:     1         1
+          / \       / \
+         2   3     2   3
+
+        [1,2,3],   [1,2,3]
+
+Output: true
+Example 2:
+
+Input:     1         1
+          /           \
+         2             2
+
+        [1,2],     [1,null,2]
+
+Output: false
+Example 3:
+
+Input:     1         1
+          / \       / \
+         2   1     1   2
+
+        [1,2,1],   [1,1,2]
+
+Output: false
+
+
+
+
+
+Solution:
+
+判断p或者q其中一个是否为空，如是，返回false，如果均为空，返回true。判断p.val 是否等于q.val，如是，返回自我调用的p.left与q.left的比较以及p.right与q.right的比较的and，否则直接返回false。
+
+
+
+
+
+Code:
+
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        if p is None or q is None:
+            return p==q
+        if p.val != q.val:
+            return False
+        return self.isSameTree(p.left,q.left) and self.isSameTree(p.right,q.right)

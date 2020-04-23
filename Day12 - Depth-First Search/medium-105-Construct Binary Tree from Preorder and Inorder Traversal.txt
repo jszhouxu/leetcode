@@ -1,0 +1,47 @@
+﻿Construct Binary Tree from Preorder and Inorder Traversal
+
+
+Description: 
+
+Given preorder and inorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+For example, given
+
+preorder = [3,9,20,15,7]
+inorder = [9,3,15,20,7]
+Return the following binary tree:
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+
+
+
+Solution:
+
+因为先序的顺序的第一个肯定是根，所以原二叉树的根节点可以知道，因为树中没有相同元素，所以可以直接定位出根节点的位置，然后以根节点的位置将中序遍历拆分为左右两个部分，分别对其递归调用原函数即可。
+
+
+
+
+
+Code:
+
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        if inorder:
+            index = inorder.index(preorder.pop(0))
+            root = TreeNode(inorder[index])
+            
+            root.left = self.buildTree(preorder, inorder[:index])
+            
+            root .right = self.buildTree(preorder, inorder[index+1:])
+            
+            return root
+        
