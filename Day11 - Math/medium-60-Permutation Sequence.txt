@@ -1,0 +1,64 @@
+﻿Permutation Sequence
+
+
+Description: 
+
+The set [1,2,3,...,n] contains a total of n! unique permutations.
+
+By listing and labeling all of the permutations in order, we get the following sequence for n = 3:
+
+"123"
+"132"
+"213"
+"231"
+"312"
+"321"
+Given n and k, return the kth permutation sequence.
+
+Note:
+
+Given n will be between 1 and 9 inclusive.
+Given k will be between 1 and n! inclusive.
+Example 1:
+
+Input: n = 3, k = 3
+Output: "213"
+Example 2:
+
+Input: n = 4, k = 9
+Output: "2314"
+
+
+
+
+Solution:
+
+根据排列组合的规律，最高位定了之后的排列组合只有(n-1)!，次高位定了之后的排列组合只有(n-2)!，以此类推。所以我们判断k是否大于1，如果大于1，首先将k-1（k从1开始，但是数组是从0开始的）对(n-1)!取商，对应确定第一位数字并取出转化为字符，之后删掉该元素，更新k（注意这边是(n-1)!取余，因为在一个类别里的排列顺序是不变的），继续对(n-2)!类似操作。注意一点，如果k=1，那么就直接把所有数字按顺序排列成字符即可。
+
+
+
+
+
+Code:
+
+class Solution:
+    def getPermutation(self, n: int, k: int) -> str:
+        fact = 1
+        for i in range(2,n+1):
+            fact *= i
+        num = [i for i in range(1,n+1)]
+        res = [""] * (n)
+        i = 0
+        while k>1:
+            fact = fact//n
+            ind = (k-1)//fact
+            k = k-(ind)*fact
+            res[i] = str(num[ind])
+            i += 1
+            num.pop(ind)
+            n-=1
+        # if k = 1
+        for n in num:
+            res[i] = str(n)
+            i+=1
+        return "".join(res)

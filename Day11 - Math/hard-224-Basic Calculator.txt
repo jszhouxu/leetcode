@@ -1,0 +1,66 @@
+﻿Basic Calculator
+
+
+Description: 
+
+Implement a basic calculator to evaluate a simple expression string.
+
+The expression string may contain open ( and closing parentheses ), the plus + or minus sign -, non-negative integers and empty spaces .
+
+Example 1:
+
+Input: "1 + 1"
+Output: 2
+Example 2:
+
+Input: " 2-1 + 2 "
+Output: 3
+Example 3:
+
+Input: "(1+(4+5+2)-3)+(6+8)"
+Output: 23
+Note:
+You may assume that the given expression is always valid.
+Do not use the eval built-in library function.
+
+
+
+
+
+
+Solution:
+
+空格全部滤掉，如果当前元素是连续数字，按多位数字存储，如果是+-号，之前存的元素放入总和，重新记录当前元素，并根据+-号更新sign位。如果碰到（），碰到（，把当前总和和运算符放入临时存储区，按之前方式重新计算括号内的值，直到判断到）为止，到了之后将临时存储区中的总和和符号位同括号内的总和和符号位进行运算，放入总和即可。
+
+
+
+
+
+Code:
+
+class Solution:
+    def calculate(self, s: str) -> int:
+        num = 0
+        sign = 1
+        res = 0
+        stack = []
+        for i in range(len(s)):
+            c = s[i]
+            if c.isdigit():
+                num = num*10 + int(c)
+            elif c in '-+':
+                res += num*sign
+                sign = -1 if c == '-' else 1
+                num = 0
+            elif c == '(':
+                stack.append(res)
+                stack.append(sign)
+                res = 0
+                sign = 1
+            elif c == ')':
+                res += sign*num
+                res *= stack.pop()
+                res += stack.pop()
+                num = 0
+        return res + num*sign
+        
