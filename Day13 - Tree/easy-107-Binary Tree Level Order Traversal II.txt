@@ -1,0 +1,70 @@
+﻿Binary Tree Level Order Traversal II
+
+
+Description: 
+
+Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its bottom-up level order traversal as:
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+
+
+
+
+
+Solution:
+
+从上至下每一层判断是否为空，如果不为空，从左至右对应存储行数组。一直到树的最底部，返回存储的多行数组的倒序。
+
+
+
+
+
+Code:
+
+class Solution:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        q = deque()
+        q.append((root, 0))
+        levels = defaultdict(list)
+        while len(q) > 0:
+            node, level = q.popleft()
+            if node:
+                levels[level].append(node.val)
+             #   q.append((node.left, level+1))
+             #   q.append((node.right,level+1))
+                q.appendleft((node.right, level+1))
+                q.appendleft((node.left, level+1))
+        
+        return list(reversed(levels.values()))
+        '''
+        if not root:
+            return root
+        stack = [root]
+        res = []
+        while stack:
+            temp = []
+            for i in stack:
+                if i.left:
+                    temp.append(i.left)
+                if i.right:
+                    temp.append(i.right)
+            res.append([i.val for i in stack])
+            stack = temp[:]
+        return res[::-1]
+        '''
+        
+        return check(root.left,root.right)
+        '''
+        

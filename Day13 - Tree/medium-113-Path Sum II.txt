@@ -1,0 +1,61 @@
+﻿Path Sum II
+
+
+Description: 
+
+Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+
+Note: A leaf is a node with no children.
+
+Example:
+
+Given the below binary tree and sum = 22,
+
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \    / \
+7    2  5   1
+Return:
+
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+
+
+
+
+Solution:
+
+首先判断root是不是空，是空返回空数组，如果只有一个根节点，判断其是否等于sum，等于就返回，不等就返回空数组。之后对左右分支分别递归调用pathSum，每次传递的sum值为sum-root.val。找到所有路径后返回。
+
+
+
+
+
+Code:
+
+class Solution:
+    def pathSum(self, root: TreeNode, sum: int) -> List[List[int]]:
+        if not root:
+            return []
+        if root.left == None and root.right == None:
+            if root.val == sum:
+                return [[root.val]]
+            else:
+                return []
+        
+        res,left,right = [],[],[]
+        sum -= root.val
+        if root.left:
+            left = self.pathSum(root.left,sum)
+        if root.right:
+            right = self.pathSum(root.right,sum)
+        for l in left:
+            res.append([root.val]+l)
+        for r in right:
+            res.append([root.val]+r)
+        return res
