@@ -1,0 +1,65 @@
+﻿Simplify Path
+
+
+Description: 
+
+Given an absolute path for a file (Unix-style), simplify it. Or in other words, convert it to the canonical path.
+
+In a UNIX-style file system, a period . refers to the current directory. Furthermore, a double period .. moves the directory up a level.
+
+Note that the returned canonical path must always begin with a slash /, and there must be only a single slash / between two directory names. The last directory name (if it exists) must not end with a trailing /. Also, the canonical path must be the shortest string representing the absolute path.
+
+ 
+
+Example 1:
+
+Input: "/home/"
+Output: "/home"
+Explanation: Note that there is no trailing slash after the last directory name.
+Example 2:
+
+Input: "/../"
+Output: "/"
+Explanation: Going one level up from the root directory is a no-op, as the root level is the highest level you can go.
+Example 3:
+
+Input: "/home//foo/"
+Output: "/home/foo"
+Explanation: In the canonical path, multiple consecutive slashes are replaced by a single one.
+Example 4:
+
+Input: "/a/./b/../../c/"
+Output: "/c"
+Example 5:
+
+Input: "/a/../../b/../c//.//"
+Output: "/c"
+Example 6:
+
+Input: "/a//b////c/d//././/.."
+Output: "/a/b/c"
+
+
+
+
+
+Solution:
+
+总结一下规律是，如果是.直接去掉，如果是..删掉其之前的一个路径，如果是空，返回/，如果有多个/保留一个即可。根据这个规律，把路径看成是由多个/分割的字符串，依次提取出来即可。
+
+
+
+
+Code:
+
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        strs = path.split('/')
+        res = []
+        for s in strs:
+            if s == '..':
+                if res:
+                    res.pop()
+            elif s.isalpha() or (s and s!='.'):
+                res.append(s)
+        return '/' + '/'.join(res)
