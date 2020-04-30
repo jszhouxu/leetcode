@@ -1,0 +1,74 @@
+﻿Word Ladder
+
+
+Description: 
+
+Given two words (beginWord and endWord), and a dictionary's word list, find the length of shortest transformation sequence from beginWord to endWord, such that:
+
+Only one letter can be changed at a time.
+Each transformed word must exist in the word list.
+Note:
+
+Return 0 if there is no such transformation sequence.
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+You may assume no duplicates in the word list.
+You may assume beginWord and endWord are non-empty and are not the same.
+Example 1:
+
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output: 5
+
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+Example 2:
+
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: 0
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+
+
+
+
+Solution:
+
+建立一个dictionary，把beginword里面的每个字符用*替换掉，放入字典中以便做后续的BFS。建立一个队列，如果不为空，就一直把最左边的元素拿出来，构建带*的word（从左到右每次只能替换一个字符），判断是否处于字典中，如果在，说明找到，直接返回index，没找到，如果不在已访问过的数组里（可以避免重复搜索），加入，否则直接跳过，继续寻找。
+
+
+
+
+
+Code:
+
+class Solution:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        if endWord not in wordList or not endWord or not beginWord or not wordList:
+            return 0
+        L = len(beginWord)
+        all_combo_dict = defaultdict(list)
+        for word in wordList:
+            for i in range(L):
+                all_combo_dict[word[:i] + "*" + word[i+1:]].append(word) 
+        queue = deque([(beginWord, 1)])
+        visited = set()
+        visited.add(beginWord)
+        while queue:
+            current_word, level = queue.popleft()
+            for i in range(L):
+                intermediate_word = current_word[:i] + "*" + current_word[i+1:]
+                for word in all_combo_dict[intermediate_word]:
+                    if word == endWord:
+                        return level + 1
+                    if word not in visited:
+                        visited.add(word)
+                        queue.append((word, level + 1))
+        return 0
