@@ -1,0 +1,48 @@
+﻿Kth Largest Element in an Array
+
+
+Description: 
+
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+Example 1:
+
+Input: [3,2,1,5,6,4] and k = 2
+Output: 5
+Example 2:
+
+Input: [3,2,3,1,2,4,5,5,6] and k = 4
+Output: 4
+Note: 
+You may assume k is always valid, 1 ≤ k ≤ array's length.
+
+
+
+
+
+Solution:
+
+参考答案，考察的是最小堆(heap)的结构使用。对整个数组中的元素进行遍历，如果堆的长度等于k且堆首元素小于当前遍历到的元素，把堆首元素删除，如果长度不等于k，把当前元素压入堆中。最后返回堆首元素即可。
+
+
+
+
+Code:
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        if k> len(nums):
+            return -1
+        h = []
+        for num in nums:
+            if len(h) == k:
+                if h[0] < num:
+                    heappop(h)
+                elif h[0] >=num:
+                    continue
+            heappush(h, num)
+           
+        if h:
+            return h[0]
+        else:
+            return -1

@@ -1,0 +1,60 @@
+﻿Different Ways to Add Parentheses
+
+
+Description: 
+
+Given a string of numbers and operators, return all possible results from computing all the different possible ways to group numbers and operators. The valid operators are +, - and *.
+
+Example 1:
+
+Input: "2-1-1"
+Output: [0, 2]
+Explanation: 
+((2-1)-1) = 0 
+(2-(1-1)) = 2
+Example 2:
+
+Input: "2*3-4*5"
+Output: [-34, -14, -10, -10, 10]
+Explanation: 
+(2*(3-(4*5))) = -34 
+((2*3)-(4*5)) = -14 
+((2*(3-4))*5) = -10 
+(2*((3-4)*5)) = -10 
+(((2*3)-4)*5) = 10
+
+
+
+
+
+Solution:
+
+用递归做，建立一个res数组，然后遍历整个input中的字符，在每个运算符的地方，将 input分成左右两部分，然后递归计算，可以得到两个整型数组left和right，分别表示作用两部分各自添加不同的括号所能得到的所有不同的值，此时只要分别从两个数组中取数字进行当前的运算符计算，然后把结果存到res中即可。
+
+
+
+
+
+Code:
+
+class Solution:
+    def diffWaysToCompute(self, input: str) -> List[int]:
+        if input.isdigit():
+            return [int(input)]
+        res = []
+        for i in range(len(input)):
+            if input[i] in "-+*":
+                left = self.diffWaysToCompute(input[:i])
+                right = self.diffWaysToCompute(input[i+1:])
+                for j in left:
+                    for k in right:
+                        res.append(self.helper(j, k, input[i]))
+        return res
+
+    def helper(self, m, n, op):
+        if op == "+":
+            return m+n
+        elif op == "-":
+            return m-n
+        else:
+            return m*n
